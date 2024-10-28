@@ -181,4 +181,156 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    initializeNotifications();
 });
+
+function updateDashboardContent(title) {
+    const contentArea = document.getElementById('dashboard-content');
+    contentArea.innerHTML = `
+        <h1>${title}</h1>
+        <div class="content-placeholder">
+            Content for ${title}
+        </div>
+    `;
+}
+
+function initializeNotifications() {
+    const notifications = [
+        {
+            id: 1,
+            title: "New User Registration",
+            message: "John Doe has registered as a new user",
+            time: "2 minutes ago",
+            isRead: false
+        },
+        {
+            id: 2,
+            title: "System Update",
+            message: "System maintenance scheduled for tomorrow",
+            time: "1 hour ago",
+            isRead: false
+        },
+        {
+            id: 3,
+            title: "New Order",
+            message: "New order #1234 received",
+            time: "3 hours ago",
+            isRead: false
+        },
+        {
+            id: 4,
+            title: "Payment Received",
+            message: "Payment for order #1233 confirmed",
+            time: "5 hours ago",
+            isRead: true
+        },
+        {
+            id: 5,
+            title: "Low Stock Alert",
+            message: "Product ID #789 is running low on stock",
+            time: "1 day ago",
+            isRead: true
+        }
+    ];
+
+    const notificationBtn = document.querySelector('.notification');
+    
+    // Add badge element
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    notificationBtn.appendChild(badge);
+
+    // Update badge count initially
+    updateBadgeCount();
+
+    // Function to update badge count
+    function updateBadgeCount() {
+        const unreadCount = notifications.filter(n => !n.isRead).length;
+        badge.textContent = unreadCount;
+        badge.style.display = unreadCount > 0 ? 'block' : 'none';
+    }
+
+    // Create notification dropdown
+    const dropdown = document.createElement('div');
+    dropdown.className = 'notification-dropdown';
+    dropdown.innerHTML = `
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button class="mark-all-read">Mark all as read</button>
+        </div>
+        <div class="notification-list">
+            ${notifications.map(notif => `
+                <div class="notification-item ${notif.isRead ? 'read' : 'unread'}" data-id="${notif.id}">
+                    <div class="notification-content">
+                        <h4>${notif.title}</h4>
+                        <p>${notif.message}</p>
+                        <span class="notification-time">${notif.time}</span>
+                    </div>
+                    ${!notif.isRead ? '<span class="unread-dot"></span>' : ''}
+                </div>
+            `).join('')}
+        </div>
+        <div class="notification-footer">
+            <a href="#" class="view-all">View All Notifications</a>
+        </div>
+    `;
+    
+    notificationBtn.appendChild(dropdown);
+
+    // Update notification badge
+    const updateBadge = () => {
+        const unreadCount = notifications.filter(n => !n.isRead).length;
+        const badge = document.querySelector('.notification .badge');
+        badge.textContent = unreadCount;
+        badge.style.display = unreadCount > 0 ? 'block' : 'none';
+    };
+
+    // Event Listeners
+    notificationBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('show');
+    });
+
+    document.querySelector('.mark-all-read').addEventListener('click', (e) => {
+        e.stopPropagation();
+        notifications.forEach(n => n.isRead = true);
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.classList.remove('unread');
+            item.classList.add('read');
+            item.querySelector('.unread-dot')?.remove();
+        });
+        updateBadgeCount();  // Update the badge count
+    });
+
+    // Add click handler for individual notifications
+    document.querySelectorAll('.notification-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const notifId = parseInt(item.getAttribute('data-id'));
+            
+            // Find and update the notification in the array
+            const notification = notifications.find(n => n.id === notifId);
+            if (notification && !notification.isRead) {
+                notification.isRead = true;
+                
+                // Update UI
+                item.classList.remove('unread');
+                item.classList.add('read');
+                const unreadDot = item.querySelector('.unread-dot');
+                if (unreadDot) {
+                    unreadDot.remove();
+                }
+                
+                // Update badge count
+                updateBadgeCount();
+            }
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!notificationBtn.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+}
