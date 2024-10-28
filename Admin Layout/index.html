@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <img src="logo.png" alt="Logo">
+                <h2>Hi, Admin</h2>
+                <h6>Super Admin</h6>
+            </div>
+            <nav class="menu">
+                <ul id="main-menu">
+                    <!-- Menu items will be generated dynamically -->
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Dynamic submenu container -->
+        <div id="submenu-container">
+            <!-- Submenus will be generated dynamically -->
+        </div>
+
+        <div class="main-content">
+            <div class="top-bar">
+                <h2 class="page-title">Dashboard</h2>
+                <div class="top-bar-right">
+                    <button class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            <div class="content">
+                <!-- Your page content goes here -->
+                <p>Welcome to the admin panel!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+
+</body>
+</html>
