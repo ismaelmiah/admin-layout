@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Update dashboard content
       const menuText = menuItem.querySelector("span").textContent.trim();
-    debugger;
+      debugger;
 
       updateDashboardContent(menuText);
     }
@@ -195,6 +195,28 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   initializeNotifications();
+
+  // Add this to your DOMContentLoaded event listener
+  const profileBtn = document.querySelector(".profile-btn");
+  const profileDropdown = document.querySelector(".profile-dropdown");
+
+  // Toggle dropdown on button click
+  profileBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    profileDropdown.classList.toggle("active");
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!profileDropdown.contains(e.target)) {
+      profileDropdown.classList.remove("active");
+    }
+  });
+
+  // Prevent dropdown from closing when clicking inside it
+  document.querySelector(".dropdown-menu").addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
 });
 
 function updateDashboardContent(title) {
